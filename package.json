@@ -1,0 +1,14 @@
+{
+  "name": "typescript-training",
+  "version": "1.0.0",
+  "description": "Learn and practice TypeScript.",
+  "scripts": {
+    "start": "tsc -w"
+  },
+  "keywords": ["typescript", "training"],
+  "author": "bangbangde",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  }
+}
