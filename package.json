@@ -5,7 +5,10 @@
   "scripts": {
     "start": "tsc -w"
   },
-  "keywords": ["typescript", "training"],
+  "keywords": [
+    "typescript",
+    "training"
+  ],
   "author": "bangbangde",
   "license": "MIT",
   "devDependencies": {
