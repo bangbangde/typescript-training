@@ -117,8 +117,84 @@ function printId(id: number | string) {
 > 给 __任意类型__ 起一个别名，方便复用。
 
 ```ts
+type ID = number | string;
+
 type Point = {
   x: number;
   y: number;
 };
 ```
+
+### Interfaces
+给 __对象类型__ 命名的另一种方式
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+}
+```
+
+### Type Aliases vs Interfaces
+扩展性
+- Type Aliases 定义后不可修改，只能通过 & 生成新的别名
+- Interfaces 可以扩展 （extends、merge)，编译性能更好
+
+原始类型
+- Type Aliases 可以是原始类型
+- Interfaces 只能是对象类型
+
+### Type Assertions
+类型断言
+使用场景如下：有时，您会获得 TypeScript 无法了解的值类型信息。
+
+使用 as 语法
+```ts
+const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
+```
+
+使用尖括号语法（在tsx 中不可用）
+```ts
+const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
+``` 
+
+### Literal Types
+字面量类型
+
+约束变量或参数为特定的值，而不是某种通用的类型。
+
+通常与联合类型一起使用，以创建更复杂的类型约束。
+
+```ts
+let EventName: "click" | "scroll" | "mousemove";
+
+let obj: { counter: 0 };
+```
+
+#### 字面量推断
+Literal Inference（字面量推断）在 TypeScript 中指的是编译器如何推断字面量类型。
+
+它是 TypeScript 类型系统中的一个特性，当你在定义变量或常量时，编译器会根据你赋予的字面量值来推断最具体的类型，而不是更通用的类型。
+
+下面是使用 `as const` 将整个对象转换为字面量类型的例子：
+```ts
+const req = { url: "https://example.com", method: "GET" } as const;
+```
+
+### null and undefined
+strictNullChecks 开启时，null 和 undefined 各自拥有类型，不能再赋给其他类型变量。且要使用缩小范围来分别检查值是否为 null 或 undefined。
+
+#### 非空断言
+Non-null Assertion Operator (Postfix `!`)
+```ts
+function liveDangerously(x?: number | null) {
+  // No error
+  console.log(x!.toFixed());
+}
+```
+
+### Enums
+向运行时添加的特性，非必要不使用。
+
+### 不太常用的原始类型
+bigint、symbol

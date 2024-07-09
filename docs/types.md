@@ -20,13 +20,12 @@ function getFavoriteNumber(): number {
 }
 ```
 
-## TypeScript 支持的类型
+## TypeScript 中的类型
 
 - JS 原始类型： string, number, boolean, bigint, symbol, null, undefined
 - 特殊类型：void, never, any, unknown
 - 复杂类型：object, array, tuple, enum
 - 复合类型：union types, intersection types, type alias, interface
-- 字面量类型
 
 对象类型
 ```ts
@@ -43,10 +42,12 @@ let val12: { name: string, [key: string]: any }; // 任意属性
 let val13: Array<number> = [1, 2, 3];
 let val14: number[] = [1, 2, 3];
 ```
+
 Union Type
 ```ts
 let val15: string | number = "hello";
 ```
+
 Type Aliases -- 给任意类型起一个别名，方便复用。
 ```ts
 type Point = {
@@ -61,8 +62,6 @@ Interfaces, 给 对象类型命名的另一种方式
 ```ts
 
 ```
-
-
 
 ## void 的使用场景
 
