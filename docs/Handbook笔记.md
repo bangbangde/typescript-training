@@ -198,3 +198,16 @@ function liveDangerously(x?: number | null) {
 
 ### 不太常用的原始类型
 bigint、symbol
+
+## [Narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
+
+这篇文档解释了 TypeScript 如何通过 __控制流__ 分析来减少变量的 __可能类型集__。
+
+涵盖了
+- 类型保护
+- 类型谓词
+- in 操作符
+- instanceof 操作符
+- 类型断言
+
+等概念。这些工具帮助确保变量是特定类型，从而使代码更可预测和安全。
