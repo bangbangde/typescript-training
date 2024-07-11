@@ -21,7 +21,7 @@
 
 
 
-## [基础（The Basics）](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)
+## [The Basics](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)
 
 开篇举例介绍了 JavaScript 的动态类型问题。由此引出静态类型检查系统。
 
@@ -201,13 +201,95 @@ bigint、symbol
 
 ## [Narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
 
-这篇文档解释了 TypeScript 如何通过 __控制流__ 分析来减少变量的 __可能类型集__。
+TypeScript 会追踪程序可能的执行路径，以分析某个位置上值的最具体可能类型。它会查看这些特殊检查（称为类型保护）和赋值操作，并将类型细化为比声明时更具体的类型，这个过程称为 __‘类型收窄’__。
 
-涵盖了
-- 类型保护
-- 类型谓词
-- in 操作符
-- instanceof 操作符
-- 类型断言
+### 类型保护（type guard）
+> Within our if check, TypeScript sees `typeof padding === "number"` and understands that as a special form of code called a __type guard__. 
 
-等概念。这些工具帮助确保变量是特定类型，从而使代码更可预测和安全。
+### 类型谓词 Using type predicates
+
+type predicates（类型谓词）是一种自定义 __类型保护__ 的方式。
+
+具体做法就是定义一个返回类型是 type predicate 的 函数。
+
+看下例，`pet is Fish` 就是一个 type predicate。
+
+```ts
+function isFish(pet: Fish | Bird): pet is Fish {
+  return (pet as Fish).swim !== undefined;
+}
+```
+
+> 一个 predicate 的形式就是：`parameterName is Type`，其中 parameterName 必须是当前函数签名中的参数名称。
+
+
+### Assertion functions
+
+类型层面的 __断言函数__。
+
+例如：
+
+```ts
+// 断言 condition 是 truthy
+function assert(condition: any, msg?: string): asserts condition {
+  if (!condition) {
+    throw new AssertionError(msg);
+  }
+}
+
+// 断言 val 是 string 用了 类型谓词
+function assertIsString(val: any): asserts val is string {
+  if (typeof val !== "string") {
+    throw new AssertionError("Not a string!");
+  }
+}
+```
+
+### Discriminated unions
+
+这是一种特殊的联合类型（已经被区分的联合类型）。
+
+> When every type in a union contains a common property with literal types, TypeScript considers that to be a __discriminated union__, and can narrow out the members of the union.
+
+联合类型的成员类型含有字面量类型的共有属性（区分符），这个区分符使得不同的成员类型可以被明确地区分和处理。
+
+下例中，Shape 就是一个 __discriminated union__ 类型，kind 属性是区分符。
+
+```ts
+interface Circle {
+  kind: "circle";
+  radius: number;
+}
+ 
+interface Square {
+  kind: "square";
+  sideLength: number;
+}
+ 
+type Shape = Circle | Square;
+```
+
+### never & Exhaustiveness checking
+
+收窄类型时，在类型选项减少到消除所有可能性并且没有任何剩余的位置时，TypeScript 将使用 never 类型来表示不应该存在的状态。
+
+详尽性检查：收窄类型至 never。
+
+```ts
+type Foo = string | number;
+
+function checkType(value: Foo) {
+    if (typeof value === "string") {
+        console.log("It's a string");
+    } else if (typeof value === "number") {
+        console.log("It's a number");
+    } else {
+        // 这里的 value 类型会被推断为 never
+        // 如果有新的类型被添加到 Foo，TS会 报告错误
+        const exhaustiveCheck: never = value;
+        console.log(exhaustiveCheck);
+    }
+}
+```
+
+## [More on Functions](https://www.typescriptlang.org/docs/handbook/2/functions.html)
