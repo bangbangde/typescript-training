@@ -375,4 +375,28 @@ const parsed = map(["1", "2", "3"], (n) => parseInt(n));
 
 ### Constraints
 
-约束
+使用约束来限制类型参数可以接受的类型种类。
+
+__extends__:
+```ts
+function longest<Type extends { length: number }>(a: Type, b: Type) {
+  if (a.length >= b.length) {
+    return a;
+  } else {
+    return b;
+  }
+}
+```
+
+在调用函数时指定 type parameter：
+
+```ts
+function combine<Type>(arr1: Type[], arr2: Type[]): Type[] {
+  return arr1.concat(arr2);
+}
+
+const arr = combine<string | number>([1, 2, 3], ["hello"]);
+```
+
+> 这个例子在调用函数时通过在函数名后面添加`string | number`将 Type 设置为`string | number`类型。
+
