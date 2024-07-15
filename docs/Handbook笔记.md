@@ -293,3 +293,86 @@ function checkType(value: Foo) {
 ```
 
 ## [More on Functions](https://www.typescriptlang.org/docs/handbook/2/functions.html)
+TS 有许多方式描述函数的调用方式。
+
+### Function Type Expressions
+最简单的方式 - 函数类型表达式。
+
+这种类型的语法很像箭头函数：`(a: string) => void`。
+
+```ts
+function greeter(fn: (a: string) => void) {
+  fn("Hello, World");
+}
+ 
+function printToConsole(s: string) {
+  console.log(s);
+}
+ 
+greeter(printToConsole);
+```
+
+### Call Signatures
+js中函数是一种特殊的对象，也是可以有属性的，描述这种函数可以使用 - __调用签名__。
+
+```ts
+type DescribableFunction = {
+  description: string;
+  (someArg: number): boolean;
+};
+```
+
+> 注意和 函数类型表达式 的细微区别：
+> 
+> `(a: string) => void`
+>
+> `(someArg: number): boolean`
+
+### Construct Signatures
+为构造函数准备的 - 改造 call signatures ( 前面加个 new )。
+
+```ts
+type SomeConstructor = {
+  new (s: string): SomeObject;
+};
+```
+
+有的函数既可以直接调用，也可以作为构造函数使用：
+```ts
+interface CallOrConstruct {
+  (n?: number): string;
+  new (s: string): Date;
+}
+```
+
+### Generic Functions
+函数的 返回值类型和参数类型相关连 或 多个参数的类型相关连 - 范型函数。
+
+TS 中使用 __范型（generics）__ 来描述两个值是一致的，
+做法是在函数签名中声明 __类型参数（type parameter）__ 来做到这一点：
+
+```ts
+function firstElement<Type>(arr: Type[]): Type | undefined {
+  return arr[0];
+}
+```
+
+上例中的 `Type` 就是一个类型参数。
+
+### Inference
+
+TypeScript 会根据函数调用的上下文来 __推断__ 出 __类型参数__ 的值。
+
+```ts
+function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[] {
+  return arr.map(func);
+}
+ 
+// Parameter 'n' is of type 'string'
+// 'parsed' is of type 'number[]'
+const parsed = map(["1", "2", "3"], (n) => parseInt(n));
+```
+
+### Constraints
+
+约束
