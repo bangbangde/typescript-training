@@ -359,7 +359,7 @@ function firstElement<Type>(arr: Type[]): Type | undefined {
 
 上例中的 `Type` 就是一个类型参数。
 
-### Inference
+#### Inference
 
 TypeScript 会根据函数调用的上下文来 __推断__ 出 __类型参数__ 的值。
 
@@ -373,9 +373,9 @@ function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[
 const parsed = map(["1", "2", "3"], (n) => parseInt(n));
 ```
 
-### Constraints
+#### Constraints
 
-使用约束来限制类型参数可以接受的类型种类。
+使用 __约束__来限制类型参数可以接受的类型种类。
 
 __extends__:
 ```ts
@@ -387,6 +387,25 @@ function longest<Type extends { length: number }>(a: Type, b: Type) {
   }
 }
 ```
+
+#### Working with Constrained Values
+
+使用 generic constraints 时，需要注意：
+```ts
+function minimumLength<Type extends { length: number }>(
+  obj: Type,
+  minimum: number
+): Type {
+  if (obj.length >= minimum) {
+    return obj;
+  } else {
+    return { length: minimum }; // 错误：返回的对象即使形状和 Type 约束条件一致也不行，因为它不是 Type。而函数声明的返回类型是 Type。
+  }
+}
+```
+
+
+#### Specifying Type Arguments
 
 在调用函数时指定 type parameter：
 
@@ -400,3 +419,20 @@ const arr = combine<string | number>([1, 2, 3], ["hello"]);
 
 > 这个例子在调用函数时通过在函数名后面添加`string | number`将 Type 设置为`string | number`类型。
 
+#### Guidelines for Writing Good Generic Functions
+
+- Push Type Parameters Down
+
+  这句话的意思是 __将类型参数推迟到更具体或更内层的上下文中使用__，而不是在更外层或更通用的上下文中声明和使用类型参数。
+
+  换句话来说，尽量使用类型参数本身而不是给它加约束。
+
+- Use Fewer Type Parameters
+
+  类型参数越少越好
+
+- Type Parameters Should Appear Twice
+
+  类型参数是用来关联多个值的类型的。否则没必要使用
+
+### Optional Parameters
