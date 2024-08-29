@@ -135,3 +135,21 @@ function checkType(value: Foo) {
 > 在 ECMA-262 规范中，实现了 [[Call]] 内部方法的对象被视为函数
 >
 > ES6的类只是个特殊的函数
+
+## 索引签名 - `index signature`
+ts 支持数字和字符串索引签名（联合签名），但不能有多个相同类型的索引签名：
+
+```ts
+// 正确
+type MixedIndex = {
+  [key: string]: number;
+  [index: number]: string; // 这个签名会被合并到上面的签名中
+};
+
+// 错误
+type InvalidIndex = {
+  [key: string]: number;
+  [key: string]: string; // 错误：不能有多个相同类型的索引签名
+};
+
+```
